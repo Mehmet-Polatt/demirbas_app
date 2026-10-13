@@ -12,6 +12,9 @@ interface QrCodeModalProps {
 export function QrCodeModal({ device, onClose }: QrCodeModalProps) {
   if (!device) return null;
 
+  const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+  const backendBase = `http://${host}:8000`;
+
   const handlePrint = () => {
     window.print();
   };
@@ -20,14 +23,14 @@ export function QrCodeModal({ device, onClose }: QrCodeModalProps) {
     const link = document.createElement('a');
     link.href = device.qr_code_path?.startsWith('http') 
       ? device.qr_code_path 
-      : `http://localhost:8000${device.qr_code_path}`;
+      : `${backendBase}${device.qr_code_path}`;
     link.download = `QR_${device.asset_tag}.png`;
     link.target = '_blank';
     link.click();
   };
 
   const qrImageUrl = device.qr_code_path
-    ? (device.qr_code_path.startsWith('http') ? device.qr_code_path : `http://localhost:8000${device.qr_code_path}`)
+    ? (device.qr_code_path.startsWith('http') ? device.qr_code_path : `${backendBase}${device.qr_code_path}`)
     : `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
         JSON.stringify({ system: 'IT_DEMIRBAS_YS', asset_tag: device.asset_tag, model: device.model })
       )}`;
