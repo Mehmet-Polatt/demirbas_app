@@ -43,7 +43,7 @@ def generate_device_qr_code(asset_tag: str, metadata: dict = None) -> tuple[str,
 
     # Also generate base64 representation for direct client rendering
     buffered = io.BytesIO()
-    img.save(buffered, format="PNG")
+    img.save(buffered)
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
     data_uri = f"data:image/png;base64,{img_str}"
 
